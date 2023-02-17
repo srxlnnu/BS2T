@@ -13,9 +13,9 @@ class BS2T(nn.Module):
 
         # spectral branch
         self.name = 'BS2T'
-        self.transform23 = BottleStack(dim=36, fmap_size=9, dim_out=12, proj_factor=3, downsample=False, heads=2, dim_head=2, rel_pos_emb=False, activation=nn.ReLU())
-        self.transform11 = BottleStack(dim=60, fmap_size=9, dim_out=60, proj_factor=5, downsample=False, heads=2, dim_head=6, rel_pos_emb=False, activation=nn.ReLU())
-        self.transform24 = BottleStack(dim=48, fmap_size=9, dim_out=12, proj_factor=3, downsample=False, heads=2, dim_head=2, rel_pos_emb=False, activation=nn.ReLU())
+        self.transform23 = BottleStack(dim=36, fmap_size=9, dim_out=12, proj_factor=2, downsample=False, heads=3, dim_head=2, rel_pos_emb=False, activation=nn.ReLU())
+        self.transform11 = BottleStack(dim=60, fmap_size=9, dim_out=60, proj_factor=5, downsample=False, heads=3, dim_head=4, rel_pos_emb=False, activation=nn.ReLU())
+        self.transform24 = BottleStack(dim=48, fmap_size=9, dim_out=12, proj_factor=2, downsample=False, heads=3, dim_head=2, rel_pos_emb=False, activation=nn.ReLU())
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=200,
             nhead=2,
