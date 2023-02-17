@@ -10,9 +10,8 @@ import sys
 sys.path.append('../global_module/')
 import global_module.network as network
 import global_module.train as train
-from global_module import LSSCM
+# from global_module import LSSCM
 from global_module.generate_pic import aa_and_each_accuracy, sampling,load_dataset, generate_png, generate_iter
-# from global_module.Utils import fdssc_model, record, extract_samll_cubic
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -41,7 +40,7 @@ print('The class numbers of the HSI data is:', CLASSES_NUM)
 
 print('-----Importing Setting Parameters-----')
 ITER = 10
-PATCH_LENGTH = 5
+PATCH_LENGTH = 4
 # number of training samples per class
 #lr, num_epochs, batch_size = 0.001, 200, 32
 lr, num_epochs, batch_size = 0.0005, 150, 16
@@ -74,9 +73,7 @@ padded_data = np.lib.pad(whole_data, ((PATCH_LENGTH, PATCH_LENGTH), (PATCH_LENGT
                          'constant', constant_values=0)
 
 
-net = network.BS2T
-optimizer = optim.Adam(net.parameters(), lr=lr, amsgrad=False) #, weight_decay=0.0001)
-time_1 = int(time.time())
+
 np.random.seed(seeds[1])
 train_indices, test_indices = sampling(VALIDATION_SPLIT, gt)
 _, total_indices = sampling(1, gt)
@@ -93,7 +90,11 @@ print('-----Selecting Small Pieces from the Original Cube Data-----')
 train_iter, valida_iter, test_iter, all_iter = generate_iter(TRAIN_SIZE, train_indices, TEST_SIZE, test_indices, TOTAL_SIZE, total_indices, VAL_SIZE,
               whole_data, PATCH_LENGTH, padded_data, INPUT_DIMENSION, batch_size, gt)
 for index_iter in range(ITER):
+    np.random.seed(seeds[index_iter])
     print('iter:', index_iter)
+    net = network.BS2T(BAND, CLASSES_NUM)
+    optimizer = optim.Adam(net.parameters(), lr=lr, amsgrad=False)  # , weight_decay=0.0001)
+    time_1 = int(time.time())
     tic1 = time.clock()
     train.train(net, train_iter, valida_iter, loss, optimizer, device, epochs=num_epochs)
     toc1 = time.clock()
