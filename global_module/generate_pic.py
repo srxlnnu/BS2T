@@ -11,8 +11,8 @@ import torch.utils.data as Data
 def load_dataset(Dataset):
     if Dataset == 'IN':
         
-        mat_data = sio.loadmat('../datasets/PaviaU\datasets\Indian_pines_corrected.mat')
-        mat_gt = sio.loadmat('../datasets/PaviaU\datasets\Indian_pines_gt.mat')
+        mat_data = sio.loadmat('D:/LNNU/data/HS-MS Indian/Indian_pines_corrected.mat')
+        mat_gt = sio.loadmat('D:/LNNU/data/HS-MS Indian/Indian_pines_gt.mat')
         data_hsi = mat_data['indian_pines_corrected']
         gt_hsi = mat_gt['indian_pines_gt']
         TOTAL_SIZE = 10249
@@ -210,20 +210,20 @@ def generate_iter(TRAIN_SIZE, train_indices, TEST_SIZE, test_indices, TOTAL_SIZE
 
     # print(y1_train)
     #y1_train = to_categorical(y1_train)  # to one-hot labels
-    x1_tensor_train = torch.from_numpy(x_train).type(torch.FloatTensor)
+    x1_tensor_train = torch.from_numpy(x_train).type(torch.FloatTensor).unsqueeze(1)
     y1_tensor_train = torch.from_numpy(y_train).type(torch.FloatTensor)
     torch_dataset_train = Data.TensorDataset(x1_tensor_train, y1_tensor_train)
 
-    x1_tensor_valida = torch.from_numpy(x_val).type(torch.FloatTensor)
+    x1_tensor_valida = torch.from_numpy(x_val).type(torch.FloatTensor).unsqueeze(1)
     y1_tensor_valida = torch.from_numpy(y_val).type(torch.FloatTensor)
     torch_dataset_valida = Data.TensorDataset(x1_tensor_valida, y1_tensor_valida)
 
-    x1_tensor_test = torch.from_numpy(x_test).type(torch.FloatTensor)
+    x1_tensor_test = torch.from_numpy(x_test).type(torch.FloatTensor).unsqueeze(1)
     y1_tensor_test = torch.from_numpy(y_test).type(torch.FloatTensor)
     torch_dataset_test = Data.TensorDataset(x1_tensor_test, y1_tensor_test)
 
     all_data.reshape(all_data.shape[0], all_data.shape[1], all_data.shape[2], INPUT_DIMENSION)
-    all_tensor_data = torch.from_numpy(all_data).type(torch.FloatTensor)
+    all_tensor_data = torch.from_numpy(all_data).type(torch.FloatTensor).unsqueeze(1)
     all_tensor_data_label = torch.from_numpy(gt_all).type(torch.FloatTensor)
     torch_dataset_all = Data.TensorDataset(all_tensor_data, all_tensor_data_label)
 
@@ -294,25 +294,23 @@ def generate_iterTrans(TRAIN_SIZE, train_indices, TEST_SIZE, test_indices, TOTAL
     x_test_spe = x_test_all_spe[:-VAL_SIZE]
     y_test = y_test[:-VAL_SIZE]
 
-
-    x1_tensor_train = torch.from_numpy(x_train).type(torch.FloatTensor)
-    x1_tensor_train_spe = torch.from_numpy(x_train_spe).type(torch.FloatTensor)
+    x1_tensor_train = torch.from_numpy(x_train).type(torch.FloatTensor).unsqueeze(1)
+    x1_tensor_train_spe = torch.from_numpy(x_train_spe).type(torch.FloatTensor).unsqueeze(1)
     y1_tensor_train = torch.from_numpy(y_train).type(torch.FloatTensor)
     torch_dataset_train = Data.TensorDataset(x1_tensor_train, x1_tensor_train_spe, y1_tensor_train)
 
-    x1_tensor_valida = torch.from_numpy(x_val).type(torch.FloatTensor)
-    x1_tensor_valida_spe = torch.from_numpy(x_val_spe).type(torch.FloatTensor)
+    x1_tensor_valida = torch.from_numpy(x_val).type(torch.FloatTensor).unsqueeze(1)
+    x1_tensor_valida_spe = torch.from_numpy(x_val_spe).type(torch.FloatTensor).unsqueeze(1)
     y1_tensor_valida = torch.from_numpy(y_val).type(torch.FloatTensor)
-    torch_dataset_valida = Data.TensorDataset(x1_tensor_valida,x1_tensor_valida_spe, y1_tensor_valida)
+    torch_dataset_valida = Data.TensorDataset(x1_tensor_valida, x1_tensor_valida_spe, y1_tensor_valida)
 
-    x1_tensor_test = torch.from_numpy(x_test).type(torch.FloatTensor)
-    x1_tensor_test_spe = torch.from_numpy(x_test_spe).type(torch.FloatTensor)
+    x1_tensor_test = torch.from_numpy(x_test).type(torch.FloatTensor).unsqueeze(1)
+    x1_tensor_test_spe = torch.from_numpy(x_test_spe).type(torch.FloatTensor).unsqueeze(1)
     y1_tensor_test = torch.from_numpy(y_test).type(torch.FloatTensor)
-    torch_dataset_test = Data.TensorDataset(x1_tensor_test,  x1_tensor_test_spe, y1_tensor_test)
+    torch_dataset_test = Data.TensorDataset(x1_tensor_test, x1_tensor_test_spe, y1_tensor_test)
 
-
-    all_tensor_data = torch.from_numpy(x_all).type(torch.FloatTensor)
-    all_tensor_data_spe = torch.from_numpy(x_all_spe).type(torch.FloatTensor)
+    all_tensor_data = torch.from_numpy(x_all).type(torch.FloatTensor).unsqueeze(1)
+    all_tensor_data_spe = torch.from_numpy(x_all_spe).type(torch.FloatTensor).unsqueeze(1)
     all_tensor_data_label = torch.from_numpy(gt_all).type(torch.FloatTensor)
     torch_dataset_all = Data.TensorDataset(all_tensor_data, all_tensor_data_spe, all_tensor_data_label)
 
@@ -408,3 +406,4 @@ def generate_png(all_iter, net, gt_hsi, Dataset, device, total_indices):
     classification_map(gt_re, gt_hsi, 300,
                        path + '/classification_maps/' + Dataset + '_gt.png')
     print('------Get classification maps successful-------')
+
